@@ -1,8 +1,9 @@
-
 import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedStyle
 import ripe  # Din ripe.py-fil
+
+PROJECT_VERSION = "0.0.1"
 
 
 # --- FUNKTION FÖR RIPE-VYN ---
@@ -10,15 +11,10 @@ def create_ripe_view(parent, logo_image):
     frame = ttk.Frame(parent)
     frame.grid(row=0, column=0, sticky="nsew")
     frame.grid_columnconfigure(1, weight=1)
-    frame.grid_rowconfigure(
-        5, weight=1
-    )  # Öka radindex eftersom vi lagt till en bild på rad 0
+    frame.grid_rowconfigure(5, weight=1)
 
-    # Lägg till bilden överst
     lbl_logo = ttk.Label(frame, image=logo_image)
-    lbl_logo.image = (
-        logo_image  # VIKTIGT: Spara referens så bilden inte försvinner
-    )
+    lbl_logo.image = logo_image
     lbl_logo.grid(row=0, column=0, columnspan=2, pady=10)
 
     lbl_title = ttk.Label(frame, text="RIPE Search Tool", font=("Arial", 16))
@@ -51,9 +47,8 @@ def create_imei_view(parent, logo_image):
     frame.grid(row=0, column=0, sticky="nsew")
     frame.grid_columnconfigure(1, weight=1)
 
-    # Lägg till bilden överst även här
     lbl_logo = ttk.Label(frame, image=logo_image)
-    lbl_logo.image = logo_image  # Spara referens
+    lbl_logo.image = logo_image
     lbl_logo.grid(row=0, column=0, columnspan=2, pady=10)
 
     lbl_imei_title = ttk.Label(
@@ -75,50 +70,82 @@ def create_imei_view(parent, logo_image):
     return frame
 
 
+
+# --- FUNKTION FÖR ABOUT-VYN ---
+def create_about_view(parent, logo_image):
+    frame = ttk.Frame(parent)
+    frame.grid(row=0, column=0, sticky="nsew")
+    frame.grid_columnconfigure(0, weight=1)
+    frame.grid_rowconfigure(3, weight=1)  # Allows text area to expand vertically
+
+    lbl_logo = ttk.Label(frame, image=logo_image)
+    lbl_logo.image = logo_image
+    lbl_logo.grid(row=0, column=0, columnspan=2, pady=10)
+
+    lbl_about_title = ttk.Label(
+        frame, text="P-Tools - ABOUT", font=("Arial", 16)
+    )
+    lbl_about_title.grid(row=1, column=0, columnspan=2, pady=10)
+
+    lbl_version = ttk.Label(
+        frame, text=f"Version: {PROJECT_VERSION}", font=("Arial", 12)
+    )
+    lbl_version.grid(row=2, column=0, columnspan=2, pady=10)
+
+    license_text = "Kunde inte hitta LICENSE-filen."
+    try:
+        with open("../LICENSE", "r", encoding="utf-8") as file:
+            license_text = file.read()
+    except FileNotFoundError:
+        pass
+
+    # Create Text widget and Scrollbar
+    license_label = tk.Text(frame, wrap="word", width=40, height=10)
+    license_label.insert("1.0", "Licens:\n" + license_text)
+
+    scrollbar = ttk.Scrollbar(frame, orient="vertical", command=license_label.yview)
+    license_label.config(yscrollcommand=scrollbar.set)
+
+    # Position elements properly side-by-side
+    license_label.grid(row=3, column=0, padx=(20, 0), pady=20, sticky="nsew")
+    scrollbar.grid(row=3, column=1, padx=(0, 20), pady=20, sticky="ns")
+
+    return frame
+
 # --- HUVUDPROGRAM ---
 root = tk.Tk()
 root.title("P-Tools")
 root.geometry("800x800")
 
-# Se till att filnamnet matchar det som ligger i din mapp (t.ex. icon.PNG eller inon.PNG)
 icon_image = tk.PhotoImage(file="icons/icon.PNG")
 root.iconphoto(True, icon_image)
 
-# Uppdaterad sökväg till din logo baserat på din beskrivning
-#top_image = tk.PhotoImage(file="icons/logo_image.PNG")
-# Ändra till detta för att halvera storleken:
 top_image = tk.PhotoImage(file="icons/logo_image.PNG").subsample(2, 2)
 
-# Applicera tema
 style = ThemedStyle(root)
 style.set_theme("equilux")
 
-# 1. Skapa sidofältet (Sidebar)
 sidebar = ttk.Frame(root, width=150)
 sidebar.grid(row=0, column=0, sticky="ns")
 
-# 2. Skapa huvudinnehållsframen (Container för alla vyer)
 main_frame = ttk.Frame(root)
 main_frame.grid(row=0, column=1, sticky="nsew")
 
-# Konfigurera grid-vikter
 root.grid_columnconfigure(1, weight=1)
 root.grid_rowconfigure(0, weight=1)
 
 main_frame.grid_columnconfigure(0, weight=1)
 main_frame.grid_rowconfigure(0, weight=1)
 
-# Skapa vyerna och skicka med bilden som argument
 ripe_frame = create_ripe_view(main_frame, top_image)
 imei_frame = create_imei_view(main_frame, top_image)
+about_frame = create_about_view(main_frame, top_image)
 
 
-# --- FUNKTION FÖR ATT BYTA FRAME ---
 def show_frame(frame):
     frame.tkraise()
 
 
-# --- SIDOFÄLTETS KNAPPAR ---
 lbl_menu = ttk.Label(sidebar, text="Menu", font=("Arial", 12, "bold"))
 lbl_menu.grid(row=0, column=0, padx=10, pady=20)
 
@@ -132,7 +159,11 @@ btn_IMEI_Checker = ttk.Button(
 )
 btn_IMEI_Checker.grid(row=2, column=0, padx=10, pady=5)
 
-# Starta på RIPE-vyn som standard
+btn_about_window = ttk.Button(
+    sidebar, text="About", width=15, command=lambda: show_frame(about_frame)
+)
+btn_about_window.grid(row=3, column=0, padx=10, pady=5)
+
 show_frame(ripe_frame)
 
 root.mainloop()
