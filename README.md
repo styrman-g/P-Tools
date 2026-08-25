@@ -27,7 +27,7 @@ The IMEI feature is prepared in the interface but is not enabled yet.
 Clone the project and open the project directory:
 
 ```bash
-git clone https://github.com/ditt-användarnamn/ditt-repo.git
+git clone https://github.com/styrman-g/P-Tools.git
 cd P-Tools
 ```
 
@@ -66,8 +66,8 @@ The repository includes a GitHub Actions workflow that builds a Windows `.exe` w
 To create a release, push a version tag:
 
 ```bash
-git tag v0.0.1
-git push origin v0.0.1
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 The workflow runs on tags beginning with `v` and publishes `P-Tools.exe` automatically. You can also start the workflow manually from the **Actions** tab in GitHub.
@@ -108,4 +108,4 @@ See [LICENSE](LICENSE) for the project's license terms.
 
 Download the latest version of P-Tools for Windows without installing Python:
 
-👉 **[Download P-Tools v0.0.1 (.exe)](https://github.com/ditt-användarnamn/ditt-repo/releases/latest)**
+👉 **[Download P-Tools v1.0.0 (.exe)](https://github.com/styrman-g/P-Tools/releases/download/v1.0.0/P-Tools.exe)**
