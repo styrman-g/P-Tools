@@ -9,7 +9,7 @@ import converter
 import ripe
 import phone
 
-PROJECT_VERSION = "0.0.1"
+PROJECT_VERSION = "1.0.0"
 
 
 def resource_path(relative_path):
