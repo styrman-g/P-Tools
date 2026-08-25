@@ -59,6 +59,19 @@ cd src
 python3 main.py
 ```
 
+## Create a Windows release
+
+The repository includes a GitHub Actions workflow that builds a Windows `.exe` with PyInstaller and attaches it to a GitHub Release. The workflow also bundles FFmpeg with the application.
+
+To create a release, push a version tag:
+
+```bash
+git tag v0.0.1
+git push origin v0.0.1
+```
+
+The workflow runs on tags beginning with `v` and publishes `P-Tools.exe` automatically. You can also start the workflow manually from the **Actions** tab in GitHub.
+
 ## Usage
 
 Select a tool from the sidebar and provide the requested information.

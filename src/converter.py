@@ -1,5 +1,6 @@
 import ffmpeg
 from pathlib import Path
+import sys
 from threading import Event
 from typing import Callable
 
@@ -21,8 +22,10 @@ def konvertera_mediafil(
     indata = Path(indata_sökväg)
     utdata = indata.with_suffix(f".{utdata_format}")
     cancel_event = cancel_event or Event()
+    ffmpeg_path = Path(getattr(sys, "_MEIPASS", Path(__file__).parent)) / "ffmpeg.exe"
+    ffprobe_path = Path(getattr(sys, "_MEIPASS", Path(__file__).parent)) / "ffprobe.exe"
 
-    probe_data = ffmpeg.probe(str(indata))
+    probe_data = ffmpeg.probe(str(indata), cmd=str(ffprobe_path))
     duration = float(probe_data["format"].get("duration", 0))
 
     process = (
@@ -31,7 +34,7 @@ def konvertera_mediafil(
         .output(str(utdata))
         .overwrite_output()
         .global_args("-progress", "pipe:1", "-nostats")
-        .run_async(pipe_stdout=True, pipe_stderr=True)
+        .run_async(cmd=str(ffmpeg_path), pipe_stdout=True, pipe_stderr=True)
     )
 
     try:

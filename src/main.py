@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 from pathlib import Path
 from queue import Empty, Queue
+import sys
 from threading import Event, Thread
 from ttkthemes import ThemedStyle
 import converter
@@ -9,6 +10,11 @@ import ripe
 import phone
 
 PROJECT_VERSION = "0.0.1"
+
+
+def resource_path(relative_path):
+    base_path = Path(getattr(sys, "_MEIPASS", Path(__file__).parent))
+    return base_path / relative_path
 
 
 # --- FUNKTION FÖR RIPE-VYN ---
@@ -290,10 +296,10 @@ root = tk.Tk()
 root.title("P-Tools")
 root.geometry("800x800")
 
-icon_image = tk.PhotoImage(file="icons/icon.PNG")
+icon_image = tk.PhotoImage(file=resource_path("icons/icon.PNG"))
 root.iconphoto(True, icon_image)
 
-top_image = tk.PhotoImage(file="icons/logo_image.PNG").subsample(2, 2)
+top_image = tk.PhotoImage(file=resource_path("icons/logo_image.PNG")).subsample(2, 2)
 
 style = ThemedStyle(root)
 style.set_theme("equilux")
