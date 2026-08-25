@@ -108,4 +108,4 @@ See [LICENSE](LICENSE) for the project's license terms.
 
 Download the latest version of P-Tools for Windows without installing Python:
 
-👉 **[Download P-Tools v0.0.1 (.exe)](https://github.com/ditt-användarnamn/ditt-repo/releases/latest)**
+👉 **[Download P-Tools v1.0.0 (.exe)](https://github.com/ditt-användarnamn/ditt-repo/releases/latest)**
