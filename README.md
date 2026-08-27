@@ -2,7 +2,7 @@
 	<img src="src/icons/icon.PNG" alt="P-Tools icon" width="160">
 </p>
 
-<h1 align="center">P-Tools v1.0.1</h1>
+<h1 align="center">P-Tools v1.0.2</h1>
 
 P-Tools is a simple desktop utility built with Python and Tkinter. It brings several practical tools together in one interface.
 
