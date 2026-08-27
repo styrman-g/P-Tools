@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=P-Tools
+Comment=Network, phone and media utility tools
+Exec=p-tools
+Icon=p-tools
+Terminal=false
+Type=Application
+Categories=Utility;

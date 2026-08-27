@@ -1,4 +1,4 @@
-name: Build and Release Windows EXE
+name: Build and Release
 
 on:
   push:
@@ -74,11 +74,91 @@ jobs:
             throw "Installer was not created."
           }
 
+      - name: Upload Windows release files
+        uses: actions/upload-artifact@v4
+        with:
+          name: p-tools-windows
+          path: |
+            dist/P-Tools.exe
+            dist/P-Tools-Setup.exe
+
+  build-linux-deb:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes dpkg-dev python3-tk
+          python -m pip install -r requirements.txt pyinstaller
+
+      - name: Build Linux executable
+        run: >-
+          pyinstaller
+          --noconfirm
+          --clean
+          --onefile
+          --windowed
+          --name P-Tools
+          --add-data "src/icons:icons"
+          --add-data "LICENSE:."
+          src/main.py
+
+      - name: Build Debian package
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            version="1.0.0"
+          fi
+
+          package_root="debian-package"
+          mkdir -p "$package_root/DEBIAN" "$package_root/usr/bin" \
+            "$package_root/usr/share/applications" "$package_root/usr/share/icons/hicolor/256x256/apps"
+
+          sed "s/@VERSION@/$version/" packaging/deb/control > "$package_root/DEBIAN/control"
+          cp packaging/deb/postinst "$package_root/DEBIAN/postinst"
+          chmod 755 "$package_root/DEBIAN/postinst"
+          cp dist/P-Tools "$package_root/usr/bin/p-tools"
+          chmod 755 "$package_root/usr/bin/p-tools"
+          cp packaging/deb/p-tools.desktop "$package_root/usr/share/applications/p-tools.desktop"
+          cp src/icons/icon.PNG "$package_root/usr/share/icons/hicolor/256x256/apps/p-tools.png"
+
+          mkdir -p releases
+          dpkg-deb --build --root-owner-group "$package_root" "releases/p-tools_${version}_amd64.deb"
+          dpkg-deb --info "releases/p-tools_${version}_amd64.deb"
+
+      - name: Upload Debian package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: p-tools-deb
+          path: releases/*.deb
+
+  create-github-release:
+    needs:
+      - build-windows-exe
+      - build-linux-deb
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download release files
+        uses: actions/download-artifact@v4
+        with:
+          pattern: p-tools-*
+          path: release-files
+          merge-multiple: true
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/P-Tools.exe
-            dist/P-Tools-Setup.exe
+          files: release-files/*
           generate_release_notes: true
           name: P-Tools ${{ github.ref_name }}

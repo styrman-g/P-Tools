@@ -2,7 +2,7 @@
 	<img src="src/icons/icon.PNG" alt="P-Tools icon" width="160">
 </p>
 
-<h1 align="center">P-Tools v1.0.2</h1>
+<h1 align="center">P-Tools v1.0.3</h1>
 
 P-Tools is a simple desktop utility built with Python and Tkinter. It brings several practical tools together in one interface.
 
@@ -70,7 +70,9 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-The workflow runs on tags beginning with `v` and publishes both `P-Tools.exe` and an installer named `P-Tools-Setup.exe` automatically. You can also start the workflow manually from the **Actions** tab in GitHub.
+The workflow runs on tags beginning with `v` and publishes `P-Tools.exe`, an installer named `P-Tools-Setup.exe`, and a Debian package automatically. You can also start the workflow manually from the **Actions** tab in GitHub.
+
+The same workflow also builds a Debian package for 64-bit Linux. The package is created in the `releases` directory during the build and is attached to the GitHub Release as `p-tools_<version>_amd64.deb`. FFmpeg is installed as a package dependency on the target system.
 
 ## Usage
 

@@ -1,0 +1,9 @@
+Package: p-tools
+Version: @VERSION@
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: P-Tools <maintainers@p-tools.local>
+Depends: ffmpeg, python3-tk
+Description: P-Tools desktop utility
+ A desktop utility for RIPE searches, phone number lookups and media conversion.
