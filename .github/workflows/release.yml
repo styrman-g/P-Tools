@@ -70,6 +70,9 @@ jobs:
             $version = "1.0.0"
           }
           & $iscc "/DAppVersion=$version" installer\P-Tools.iss
+          if (-not (Test-Path dist\P-Tools-Setup.exe)) {
+            throw "Installer was not created."
+          }
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
