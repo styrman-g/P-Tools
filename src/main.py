@@ -9,7 +9,7 @@ import converter
 import ripe
 import phone
 
-PROJECT_VERSION = "1.0.0"
+PROJECT_VERSION = "1.0.1"
 
 
 def resource_path(relative_path):
@@ -273,7 +273,10 @@ def create_about_view(parent, logo_image):
 
     license_text = "Kunde inte hitta LICENSE-filen."
     try:
-        with open("../LICENSE", "r", encoding="utf-8") as file:
+        application_root = Path(
+            getattr(sys, "_MEIPASS", Path(__file__).resolve().parent.parent)
+        )
+        with open(application_root / "LICENSE", "r", encoding="utf-8") as file:
             license_text = file.read()
     except FileNotFoundError:
         pass

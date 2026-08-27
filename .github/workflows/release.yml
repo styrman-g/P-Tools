@@ -51,13 +51,31 @@ jobs:
           --name P-Tools
           --icon app.ico
           --add-data "src/icons;icons"
+          --add-data "LICENSE;."
           --add-binary "ffmpeg.exe;."
           --add-binary "ffprobe.exe;."
           src/main.py
 
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress --yes
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if ($env:GITHUB_REF_NAME -match '^v(\d+\.\d+\.\d+)$') {
+            $version = $Matches[1]
+          } else {
+            $version = "1.0.0"
+          }
+          & $iscc "/DAppVersion=$version" installer\P-Tools.iss
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/P-Tools.exe
+          files: |
+            dist/P-Tools.exe
+            dist/P-Tools-Setup.exe
           generate_release_notes: true
           name: P-Tools ${{ github.ref_name }}

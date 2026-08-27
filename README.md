@@ -70,7 +70,7 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-The workflow runs on tags beginning with `v` and publishes `P-Tools.exe` automatically. You can also start the workflow manually from the **Actions** tab in GitHub.
+The workflow runs on tags beginning with `v` and publishes both `P-Tools.exe` and an installer named `P-Tools-Setup.exe` automatically. You can also start the workflow manually from the **Actions** tab in GitHub.
 
 ## Usage
 
