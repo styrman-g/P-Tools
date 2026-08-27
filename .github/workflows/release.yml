@@ -125,6 +125,7 @@ jobs:
             "$package_root/usr/share/applications" "$package_root/usr/share/icons/hicolor/256x256/apps"
 
           sed "s/@VERSION@/$version/" packaging/deb/control > "$package_root/DEBIAN/control"
+          printf '\n' >> "$package_root/DEBIAN/control"
           cp packaging/deb/postinst "$package_root/DEBIAN/postinst"
           chmod 755 "$package_root/DEBIAN/postinst"
           cp dist/P-Tools "$package_root/usr/bin/p-tools"
