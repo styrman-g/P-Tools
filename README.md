@@ -2,7 +2,7 @@
 	<img src="src/icons/icon.PNG" alt="P-Tools icon" width="160">
 </p>
 
-<h1 align="center">P-Tools v1.0.3</h1>
+<h1 align="center">P-Tools v1.0.5</h1>
 
 P-Tools is a simple desktop utility built with Python and Tkinter. It brings several practical tools together in one interface.
 
@@ -13,6 +13,8 @@ P-Tools is a simple desktop utility built with Python and Tkinter. It brings sev
 - **Media Converter** - convert video and audio files to formats such as MP4, MP3, AVI, MKV and WAV.
 - **Conversion status** - track progress with a progress bar and cancel an active conversion.
 - **About** - view the project version and license information.
+- **Update notification** - check GitHub Releases and open the latest release page when a new version is available.
+- **Separate updater** - download and start the latest Windows installer independently from the main application.
 
 The IMEI feature is prepared in the interface but is not enabled yet.
 
@@ -70,7 +72,7 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-The workflow runs on tags beginning with `v` and publishes `P-Tools.exe`, an installer named `P-Tools-Setup.exe`, and a Debian package automatically. You can also start the workflow manually from the **Actions** tab in GitHub.
+The workflow runs on tags beginning with `v` and publishes `P-Tools.exe`, `P-Tools-Updater.exe`, an installer named `P-Tools-Setup.exe`, and a Debian package automatically. You can also start the workflow manually from the **Actions** tab in GitHub. The Windows installer places the separate updater next to the main application.
 
 The same workflow also builds a Debian package for 64-bit Linux. The package is created in the `releases` directory during the build and is attached to the GitHub Release as `p-tools_<version>_amd64.deb`. FFmpeg is installed as a package dependency on the target system.
 

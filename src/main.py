@@ -4,17 +4,50 @@ from pathlib import Path
 from queue import Empty, Queue
 import sys
 from threading import Event, Thread
+import webbrowser
+import requests
 from ttkthemes import ThemedStyle
 import converter
 import ripe
 import phone
 
-PROJECT_VERSION = "1.0.3"
+PROJECT_VERSION = "1.0.5"
+GITHUB_REPOSITORY = "styrman-g/P-Tools"
+RELEASES_URL = f"https://github.com/{GITHUB_REPOSITORY}/releases/latest"
 
 
 def resource_path(relative_path):
     base_path = Path(getattr(sys, "_MEIPASS", Path(__file__).parent))
     return base_path / relative_path
+
+
+def check_for_update(notification_label):
+    def fetch_latest_release():
+        try:
+            response = requests.get(
+                f"https://api.github.com/repos/{GITHUB_REPOSITORY}/releases/latest",
+                timeout=5,
+            )
+            response.raise_for_status()
+            latest_version = response.json().get("tag_name", "").lstrip("v")
+            current_parts = tuple(int(part) for part in PROJECT_VERSION.split("."))
+            latest_parts = tuple(int(part) for part in latest_version.split("."))
+            if latest_parts > current_parts:
+                root.after(
+                    0,
+                    lambda: notification_label.config(
+                        text=f"New version available: v{latest_version}",
+                        cursor="hand2",
+                    ),
+                )
+        except (requests.RequestException, ValueError, TypeError):
+            pass
+
+    Thread(target=fetch_latest_release, daemon=True).start()
+
+
+def open_releases_page(_event=None):
+    webbrowser.open(RELEASES_URL)
 
 
 # --- FUNKTION FÖR RIPE-VYN ---
@@ -358,6 +391,18 @@ btn_about_window = ttk.Button(
 )
 btn_about_window.grid(row=4, column=0, padx=10, pady=5)
 
+update_notification = tk.Label(
+    sidebar,
+    text="",
+    foreground="#5aa9e6",
+    cursor="hand2",
+    wraplength=130,
+    justify="center",
+)
+update_notification.grid(row=5, column=0, padx=10, pady=(20, 5))
+update_notification.bind("<Button-1>", open_releases_page)
+
 show_frame(ripe_frame)
+check_for_update(update_notification)
 
 root.mainloop()

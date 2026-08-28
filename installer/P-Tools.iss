@@ -19,6 +19,7 @@ LicenseFile=..\LICENSE
 
 [Files]
 Source: "..\dist\P-Tools.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\dist\P-Tools-Updater.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\P-Tools"; Filename: "{app}\P-Tools.exe"

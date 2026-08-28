@@ -56,6 +56,16 @@ jobs:
           --add-binary "ffprobe.exe;."
           src/main.py
 
+      - name: Build updater executable
+        run: >-
+          pyinstaller
+          --noconfirm
+          --clean
+          --onefile
+          --windowed
+          --name P-Tools-Updater
+          src/updater.py
+
       - name: Install Inno Setup
         shell: pwsh
         run: choco install innosetup --no-progress --yes
@@ -80,6 +90,7 @@ jobs:
           name: p-tools-windows
           path: |
             dist/P-Tools.exe
+            dist/P-Tools-Updater.exe
             dist/P-Tools-Setup.exe
 
   build-linux-deb:
