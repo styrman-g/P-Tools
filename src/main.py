@@ -3,6 +3,8 @@ from tkinter import filedialog, messagebox, ttk
 from pathlib import Path
 from queue import Empty, Queue
 import sys
+import os
+import subprocess
 from threading import Event, Thread
 import webbrowser
 import requests
@@ -11,7 +13,7 @@ import converter
 import ripe
 import phone
 
-PROJECT_VERSION = "1.0.6"
+PROJECT_VERSION = "1.0.7"
 GITHUB_REPOSITORY = "styrman-g/P-Tools"
 RELEASES_URL = f"https://github.com/{GITHUB_REPOSITORY}/releases/latest"
 
@@ -46,8 +48,14 @@ def check_for_update(notification_label):
     Thread(target=fetch_latest_release, daemon=True).start()
 
 
-def open_releases_page(_event=None):
-    webbrowser.open(RELEASES_URL)
+def start_updater(_event=None):
+    updater_path = Path(sys.executable).with_name("P-Tools-Updater.exe")
+    if not updater_path.exists():
+        webbrowser.open(RELEASES_URL)
+        return
+
+    subprocess.Popen([str(updater_path), "--parent-pid", str(os.getpid())])
+    root.destroy()
 
 
 # --- FUNKTION FÖR RIPE-VYN ---
@@ -401,7 +409,7 @@ update_notification = ttk.Label(
     justify="center",
 )
 update_notification.grid(row=5, column=0, padx=10, pady=(20, 5))
-update_notification.bind("<Button-1>", open_releases_page)
+update_notification.bind("<Button-1>", start_updater)
 
 show_frame(ripe_frame)
 check_for_update(update_notification)
