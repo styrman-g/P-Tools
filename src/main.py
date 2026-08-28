@@ -11,7 +11,7 @@ import converter
 import ripe
 import phone
 
-PROJECT_VERSION = "1.0.5"
+PROJECT_VERSION = "1.0.6"
 GITHUB_REPOSITORY = "styrman-g/P-Tools"
 RELEASES_URL = f"https://github.com/{GITHUB_REPOSITORY}/releases/latest"
 
@@ -391,10 +391,11 @@ btn_about_window = ttk.Button(
 )
 btn_about_window.grid(row=4, column=0, padx=10, pady=5)
 
-update_notification = tk.Label(
+style.configure("Update.TLabel", foreground="#5aa9e6")
+update_notification = ttk.Label(
     sidebar,
     text="",
-    foreground="#5aa9e6",
+    style="Update.TLabel",
     cursor="hand2",
     wraplength=130,
     justify="center",
